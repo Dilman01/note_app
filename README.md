@@ -1,16 +1,20 @@
 # note_app
+A simple app to take notes.
 
-A new Flutter project.
+## Features
+* Save notes
+* Delete notes by a button or swipe-to-delete
+* View notes
+* The notes are saved in local database
+* The Confirmation Dialog shows when the user typed the note but accidentally clicked the back button    
 
-## Getting Started
+## Screenshots
+|           Home Screen            |              Add Note Screen              |
+| :------------------------------: | :------------------------------: |
+| ![](screenshots/screenshot-1.jpg) | ![](screenshots/screenshot-2.jpg) |
 
-This project is a starting point for a Flutter application.
+|          Confirmation Dialog          |        Note Screen          |
+| :------------------------------: | :------------------------------: |
+| ![](screenshots/screenshot-3.jpg) | ![](screenshots/screenshot-4.jpg) |
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
