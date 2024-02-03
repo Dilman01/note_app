@@ -5,11 +5,25 @@ import 'package:note_app/provider/note_provider.dart';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends ConsumerWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+//  late Future<void> _notesLoad;
+
+  @override
+  void initState() {
+    super.initState();
+
+    ref.read(noteProiver.notifier).loadNotes();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final notes = ref.watch(noteProiver);
 
     return Scaffold(

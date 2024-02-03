@@ -42,7 +42,14 @@ class _AddNoteScreenState extends ConsumerState<AddNoteScreen> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  content: const Text('Save the note?'),
+                  content: const Text(
+                    'Save the note?',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  backgroundColor: const Color(0xff252525),
                   actions: [
                     TextButton(
                       onPressed: () {

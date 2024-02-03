@@ -19,7 +19,9 @@ class NoteApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData().copyWith(
-        appBarTheme: const AppBarTheme(backgroundColor: Color(0xff252525)),
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Color(0xff252525),
+        ),
         scaffoldBackgroundColor: const Color(0xff252525),
       ),
       home: const HomeScreen(),
