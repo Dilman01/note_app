@@ -1,12 +1,12 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:note_app/provider/note_provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:note_app/bloc/note_bloc.dart';
 import 'package:note_app/screens/note_screen.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-class NoteContainer extends ConsumerWidget {
+class NoteContainer extends StatelessWidget {
   const NoteContainer({
     super.key,
     required this.id,
@@ -19,7 +19,7 @@ class NoteContainer extends ConsumerWidget {
   final String content;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     List<dynamic> colors = const [
       Color(0xffFD99FF),
       Color(0xffFF9E9E),
@@ -52,7 +52,7 @@ class NoteContainer extends ConsumerWidget {
             color: Colors.red,
           ),
           onDismissed: (direction) {
-            ref.read(noteProiver.notifier).deleteNote(id);
+            context.read<NoteBloc>().add(DeleteNote(id: id));
           },
           direction: DismissDirection.endToStart,
           child: Container(
@@ -81,7 +81,7 @@ class NoteContainer extends ConsumerWidget {
               ),
               trailing: IconButton(
                 onPressed: () {
-                  ref.read(noteProiver.notifier).deleteNote(id);
+                  context.read<NoteBloc>().add(DeleteNote(id: id));
                 },
                 icon: const Icon(
                   Icons.delete,

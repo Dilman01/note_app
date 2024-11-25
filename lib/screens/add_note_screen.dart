@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/bloc/note_bloc.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:note_app/provider/note_provider.dart';
-
-class AddNoteScreen extends ConsumerStatefulWidget {
+class AddNoteScreen extends StatefulWidget {
   const AddNoteScreen({super.key});
 
   @override
-  ConsumerState<AddNoteScreen> createState() => _AddNoteScreenState();
+  State<AddNoteScreen> createState() => _AddNoteScreenState();
 }
 
-class _AddNoteScreenState extends ConsumerState<AddNoteScreen> {
+class _AddNoteScreenState extends State<AddNoteScreen> {
   final titleController = TextEditingController();
   final contentController = TextEditingController();
 
@@ -23,61 +22,65 @@ class _AddNoteScreenState extends ConsumerState<AddNoteScreen> {
 
   void saveNote() {
     if (titleController.text.isNotEmpty && contentController.text.isNotEmpty) {
-      ref.read(noteProiver.notifier).addNote(
-            titleController.text,
-            contentController.text,
+      context.read<NoteBloc>().add(
+            AddNote(
+              title: titleController.text,
+              content: contentController.text,
+            ),
           );
+
       Navigator.pop(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        bool value = true;
+    bool value = true;
+    return PopScope(
+      canPop: value,
+      onPopInvokedWithResult: (didPop, result) async {
         if (titleController.text.isNotEmpty &&
             contentController.text.isNotEmpty) {
           value = await showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  content: const Text(
-                    'Save the note?',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                    ),
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                content: const Text(
+                  'Save the note?',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
                   ),
-                  backgroundColor: const Color(0xff252525),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        // Navigator.of(context).pop();
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                      ),
-                      child: const Text('No'),
+                ),
+                backgroundColor: const Color(0xff252525),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      // Navigator.of(context).pop();
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
                     ),
-                    TextButton(
-                      onPressed: () {
-                        saveNote();
-                        Navigator.of(context).pop();
-                      },
-                      style: TextButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                      ),
-                      child: const Text('Save'),
+                    child: const Text('No'),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      saveNote();
+                      Navigator.of(context).pop();
+                    },
+                    style: TextButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
                     ),
-                  ],
-                );
-              });
+                    child: const Text('Save'),
+                  ),
+                ],
+              );
+            },
+          );
         }
-        return value == true;
       },
       child: Scaffold(
         appBar: AppBar(
@@ -153,7 +156,6 @@ class _AddNoteScreenState extends ConsumerState<AddNoteScreen> {
                 height: 50,
                 width: 250,
                 decoration: BoxDecoration(
-                  // border: Border.all(),
                   borderRadius: BorderRadius.circular(5),
                 ),
                 child: ElevatedButton(

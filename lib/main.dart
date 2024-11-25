@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/bloc/note_bloc.dart';
 import 'package:note_app/screens/home_screen.dart';
-
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
   runApp(
-    const ProviderScope(
-      child: NoteApp(),
-    ),
+    const NoteApp(),
   );
 }
 
@@ -16,15 +14,21 @@ class NoteApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData().copyWith(
-        appBarTheme: const AppBarTheme(
-          backgroundColor: Color(0xff252525),
+    return BlocProvider<NoteBloc>(
+      create: (context) => NoteBloc()
+        ..add(
+          LoadNotes(),
         ),
-        scaffoldBackgroundColor: const Color(0xff252525),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData().copyWith(
+          appBarTheme: const AppBarTheme(
+            backgroundColor: Color(0xff252525),
+          ),
+          scaffoldBackgroundColor: const Color(0xff252525),
+        ),
+        home: const HomeScreen(),
       ),
-      home: const HomeScreen(),
     );
   }
 }

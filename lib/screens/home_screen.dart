@@ -1,31 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:note_app/bloc/note_bloc.dart';
 import 'package:note_app/screens/add_note_screen.dart';
 import 'package:note_app/widgets/note_container.dart';
-import 'package:note_app/provider/note_provider.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
-class HomeScreen extends ConsumerStatefulWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends ConsumerState<HomeScreen> {
-//  late Future<void> _notesLoad;
-
-  @override
-  void initState() {
-    super.initState();
-
-    ref.read(noteProiver.notifier).loadNotes();
-  }
-
+class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    final notes = ref.watch(noteProiver);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -37,13 +25,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           ),
         ),
       ),
-      body: ListView.builder(
-        itemCount: notes.length,
-        itemBuilder: (context, index) => NoteContainer(
-          id: notes[index].id,
-          title: notes[index].title,
-          content: notes[index].content,
-        ),
+      body: BlocBuilder<NoteBloc, NoteState>(
+        builder: (context, state) {
+          if (state is! NoteLoaded) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            itemCount: state.notes.length,
+            itemBuilder: (context, index) => NoteContainer(
+              id: state.notes[index].id,
+              title: state.notes[index].title,
+              content: state.notes[index].content,
+            ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
